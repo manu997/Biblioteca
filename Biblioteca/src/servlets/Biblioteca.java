@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -55,9 +53,9 @@ public class Biblioteca extends HttpServlet {
 	        String isbn = request.getParameter("isbn");
 	        String verTodos = request.getParameter("verTodos");
 	        String eliminarLibro = request.getParameter("eliminar");
+	        boolean eliminado = false;
 	        
         	if(verTodos == null) {
-        		boolean eliminado = false;
         		if (eliminarLibro != null){
         			for(int i=0; i<libros.size(); i++) {
                 		if(eliminarLibro.equals(libros.get(i).getIsbn())) {
