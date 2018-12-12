@@ -61,6 +61,15 @@ public class Biblioteca extends HttpServlet {
 	        String agregarTitulo = request.getParameter("agregarTitulo");
 	        String agregarAutor = request.getParameter("agregarAutor");
 	        String agregarYear = request.getParameter("agregarYear");
+	        String menuModificarString = request.getParameter("menuModificar");
+	        int menuModificar = 0;
+	        if(menuModificarString != null) {
+	        	menuModificar = Integer.parseInt(menuModificarString);
+	        }
+	        String modificarISBN = request.getParameter("modificarISBN");
+	        String modificarTitulo = request.getParameter("modificarTitulo");
+	        String modificarAutor = request.getParameter("modificarAutor");
+	        String modificarYear = request.getParameter("modificarYear");
 	        
         	if(isbn != null) {
         		boolean isbnValido = false;
@@ -89,6 +98,7 @@ public class Biblioteca extends HttpServlet {
 	        		out.println("Título: " + libros.get(i).getTitulo() + "<br>");
 	        		out.println("Autor: " + libros.get(i).getAutor() + "<br>");
 	        		out.println("Año: " + libros.get(i).getYear() + "<br>");
+	        		out.println("<button type='button' id='modificar' value='"+i+1+"' onClick='menuModificar()'>Modificar libro</button>");
         		}
         	} else if(eliminarLibro != null) {
         			boolean eliminado = false;
@@ -103,6 +113,7 @@ public class Biblioteca extends HttpServlet {
 	    				out.println("<font color='red'>ISBN no encontrado.</font>");
 	    			}
     		} else if(menuAgregar != null){
+    			out.println("AGREGAR LIBRO");
         		out.println("<hr>");
         		out.println("ISBN: <input type='text' id='agregarISBN'/><br>");
         		out.println("Título: <input type='text' id='agregarTitulo'/><br>");
@@ -125,7 +136,45 @@ public class Biblioteca extends HttpServlet {
         				out.println("<font color='red'>Debes rellenar todos los campos para añadir un libro.</font>");
         			}
         		}
-        	}
+        	} else if(menuModificarString != null) {
+        		out.println("MODIFICAR LIBRO");
+        		out.println("<hr>");
+        		out.println("ISBN: <input type='text' id='modificarISBN'/><br>");
+        		out.println("Título: <input type='text' id='modificarTitulo'/><br>");
+        		out.println("Autor: <input type='text' id='modificarAutor'/><br>");
+        		out.println("Año: <input type='text' id='modificarYear'/><br>");
+        		out.println("<button type='button' id='modificar' onClick='modificarLibro()'>Modificar libro</button>");
+        	} else if(modificarISBN != null && modificarTitulo != null && modificarAutor != null && modificarYear != null) {
+        		boolean libroModificado = true;
+        		for(int i=0; i<libros.size(); i++) {
+        			if(libros.get(i).getIsbn().equals(modificarISBN)) {
+        				out.println("<font color='red'>Ya hay un libro con ese ISBN en la biblioteca.</font>");
+        				libroModificado = false;
+        			}
+        		}
+        		if(libroModificado == true) {
+        			if(modificarISBN == "") {
+        				out.println("<font color='red'>Debes introducir al menos el ISBN.</font>");
+        			} else {
+        				libros.get(menuModificar).setIsbn(modificarISBN);
+        				if(modificarTitulo != "") {
+            				libros.get(menuModificar).setTitulo(modificarTitulo);
+            			}
+        				if(modificarTitulo != "") {
+            				libros.get(menuModificar).setTitulo(modificarTitulo);
+            			}
+        				if(modificarAutor != "") {
+            				libros.get(menuModificar).setAutor(modificarAutor);
+            			}
+        				if(modificarYear != "") {
+            				libros.get(menuModificar).setYear(modificarYear);
+            			}
+        				out.println("<font color='green'>Libro modificado.</font>");
+        				}
+        			}
+    			} else {
+    				out.println("<font color='red'>Debes introducir al menos el ISBN.</font>");
+    			}	
 	    } else {
 	        out.println("Este servlet solo se puede invocar vía Ajax");
 	    }
