@@ -24,6 +24,9 @@ public class Biblioteca extends HttpServlet {
     
     ArrayList<Libro> libros = new ArrayList<Libro>();
     
+    // La modificacion, eliminacion o adicion de un libro no es permanente, solo perdura durante la sesion actual.
+    // Si se refresca la pagina volveran a estar los cuatro libros originales.
+    
     public void leeFicheroLibros() throws IOException {
     	if(libros.size() == 0) {
     		String directorioDestino ="ficheros/libros.txt"; // se crea directamente en el proyecto
@@ -53,22 +56,13 @@ public class Biblioteca extends HttpServlet {
 	        String isbn = request.getParameter("isbn");
 	        String verTodos = request.getParameter("verTodos");
 	        String eliminarLibro = request.getParameter("eliminar");
-	        boolean eliminado = false;
+	        String menuAgregar = request.getParameter("menuAgregar");
+	        String agregarISBN = request.getParameter("agregarISBN");
+	        String agregarTitulo = request.getParameter("agregarTitulo");
+	        String agregarAutor = request.getParameter("agregarAutor");
+	        String agregarYear = request.getParameter("agregarYear");
 	        
-        	if(verTodos == null) {
-        		if (eliminarLibro != null){
-        			for(int i=0; i<libros.size(); i++) {
-                		if(eliminarLibro.equals(libros.get(i).getIsbn())) {
-                			libros.remove(i);
-                			eliminado = true;
-                		}
-                	}
-        			if(eliminado == true) {
-        				out.println("Libro eliminado.");
-        			} else {
-        				out.println("ISBN no encontrado.");
-        			}
-        		}
+        	if(isbn != null) {
         		boolean isbnValido = false;
     	        Libro libroValido = new Libro();
     	        
@@ -88,13 +82,48 @@ public class Biblioteca extends HttpServlet {
 		        		out.println("Autor: " + libroValido.getAutor() + "<br>");
 		        		out.println("Año: " + libroValido.getYear());
 	        		}
-        	} else {
+        	} else if(verTodos != null){
         		for(int i = 0; i < libros.size(); i++) {
         			out.println("<hr>");
 	        		out.println("ISBN: " + libros.get(i).getIsbn() + "<br>");
 	        		out.println("Título: " + libros.get(i).getTitulo() + "<br>");
 	        		out.println("Autor: " + libros.get(i).getAutor() + "<br>");
 	        		out.println("Año: " + libros.get(i).getYear() + "<br>");
+        		}
+        	} else if(eliminarLibro != null) {
+        			boolean eliminado = false;
+	    			for(int i=0; i<libros.size(); i++) {
+	            		if(eliminarLibro.equals(libros.get(i).getIsbn())) {
+	            			libros.remove(i);
+	            			eliminado = true;
+	            			out.println("<font color='green'>Libro eliminado.</font>");
+	            		}
+	            	}
+	    			if(eliminado != true) {
+	    				out.println("<font color='red'>ISBN no encontrado.</font>");
+	    			}
+    		} else if(menuAgregar != null){
+        		out.println("<hr>");
+        		out.println("ISBN: <input type='text' id='agregarISBN'/><br>");
+        		out.println("Título: <input type='text' id='agregarTitulo'/><br>");
+        		out.println("Autor: <input type='text' id='agregarAutor'/><br>");
+        		out.println("Año: <input type='text' id='agregarYear'/><br>");
+        		out.println("<button type='button' id='agregar' onClick='agregarLibro()'>Añadir libro</button>");
+        	} else if(agregarISBN != null && agregarTitulo != null && agregarAutor != null && agregarYear != null) {
+        		boolean libroAgregado = true;
+        		for(int i=0; i<libros.size(); i++) {
+        			if(libros.get(i).getIsbn().equals(agregarISBN)) {
+        				out.println("<font color='red'>Ya hay un libro con ese ISBN en la biblioteca.</font>");
+        				libroAgregado = false;
+        			}
+        		}
+        		if(libroAgregado == true) {
+        			if(agregarISBN != "" && agregarTitulo != "" && agregarAutor != "" && agregarYear != "") {
+            			libros.add(new Libro(agregarISBN, agregarTitulo, agregarAutor, agregarYear));
+                		out.println("<font color='green'>Libro añadido.</font>");
+        			} else {
+        				out.println("<font color='red'>Debes rellenar todos los campos para añadir un libro.</font>");
+        			}
         		}
         	}
 	    } else {
