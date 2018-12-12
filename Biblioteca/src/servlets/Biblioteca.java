@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -26,10 +28,10 @@ public class Biblioteca extends HttpServlet {
     
     public void leeFicheroLibros() throws IOException {
     	if(libros.size() == 0) {
-	    	String fichero = "C:\\Users\\manu\\Desktop\\Biblioteca\\WebContent\\ficheros";
+    		String directorioDestino ="ficheros/libros.txt"; // se crea directamente en el proyecto
 	    	String lineaFichero;
 	    	
-	    	FileReader fr = new FileReader(fichero);
+	    	FileReader fr = new FileReader(this.getServletContext().getRealPath("/") +  directorioDestino);
 	    	BufferedReader br = new BufferedReader(fr);
 	    	
 	    	while((lineaFichero = br.readLine()) != null) {
