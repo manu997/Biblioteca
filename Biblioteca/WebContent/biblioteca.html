@@ -3,6 +3,11 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Biblioteca</title>
+<style>
+	body {
+		line-height: 2;
+	}
+</style>
 <script>
 	function buscarLibro() {
 		var datos = 'isbn=' + document.getElementById("isbn").value;
@@ -16,11 +21,47 @@
 	        // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
 	        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
 	            var respuesta = xmlhttp.responseText;
-	            if(respuesta == "") {
-	            	document.getElementById("error_isbn").value = "El ISBN no es válido";
-	            } else {
-	            	document.getElementById("datosLibro").value = respuesta;
-	            }
+	            document.getElementById("datosLibro").innerHTML = respuesta;
+	        }
+	    }
+	    xmlhttp.open("GET","Biblioteca?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
+	    xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
+	    xmlhttp.send();  // lanza la solicitud
+	}
+	
+	function mostrarLibros() {
+		var datos = 'verTodos';
+		var xmlhttp;  // objeto XMLHttpRequest
+		if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
+		    xmlhttp = new XMLHttpRequest();
+		} else {  // para IE6, IE5
+		    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.onreadystatechange = function() {
+	        // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
+	        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+	            var respuesta = xmlhttp.responseText;
+	            document.getElementById("datosLibro").innerHTML = respuesta;
+	        }
+	    }
+	    xmlhttp.open("GET","Biblioteca?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
+	    xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
+	    xmlhttp.send();  // lanza la solicitud
+	}
+	
+	function eliminarLibro() {
+		var datos = 'eliminar=' + document.getElementById("isbn").value;
+		var xmlhttp;  // objeto XMLHttpRequest
+		if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
+		    xmlhttp = new XMLHttpRequest();
+		} else {  // para IE6, IE5
+		    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.onreadystatechange = function() {
+	        // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
+	        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+	            var respuesta = xmlhttp.responseText;
+	            document.getElementById("datosLibro").innerHTML = respuesta;
 	        }
 	    }
 	    xmlhttp.open("GET","Biblioteca?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
@@ -33,10 +74,9 @@
 	<form>
 		ISBN: <input type="text" name="isbn" id="isbn"/><br>
 		<button type="button" onClick="buscarLibro()">Buscar libro</button> 
-		<button type="button">Mostrar todos los libros</button> 
-		<button type="button">Eliminar libro</button>
+		<button type="button" name="verTodos" id="verTodos" onClick="mostrarLibros()">Mostrar todos los libros</button> 
+		<button type="button"  name="eliminar" id="eliminar" onClick="eliminarLibro()">Eliminar libro</button><br>
 		<div id="datosLibro"></div>
-		<p id="error_isbn"></p>
 	</form>
 </body>
 </html>

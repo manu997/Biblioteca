@@ -1,15 +1,16 @@
-package servlets;
+package clases;
 
 public class Libro {
-	private String isbn, titulo, autor;
-	private int year;
+	private String isbn, titulo, autor, year;
 	
-	public Libro(String isbn, String titulo, String autor, int year) {
+	public Libro(String isbn, String titulo, String autor, String year) {
 		this.isbn = isbn;
 		this.titulo = titulo;
 		this.autor = autor;
-		this.autor = autor;
+		this.year = year;
 	}
+	
+	public Libro() {}
 
 	public String getIsbn() {
 		return isbn;
@@ -35,11 +36,11 @@ public class Libro {
 		this.autor = autor;
 	}
 
-	public int getYear() {
+	public String getYear() {
 		return year;
 	}
 
-	public void setYear(int year) {
+	public void setYear(String year) {
 		this.year = year;
 	}
 }

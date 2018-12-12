@@ -1,7 +1,6 @@
 package servlets;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import clases.Libro;
+
 @WebServlet("/Biblioteca")
 public class Biblioteca extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -21,51 +22,80 @@ public class Biblioteca extends HttpServlet {
         super();
     }
     
-    ArrayList<String> libros = new ArrayList<String>();
+    ArrayList<Libro> libros = new ArrayList<Libro>();
     
     public void leeFicheroLibros() throws IOException {
-    	String libro;
-    	
-    	File ficheroLibros = new File("ficheros/libros.txt");
-    	FileReader fr = new FileReader(ficheroLibros);
-    	BufferedReader br = new BufferedReader(fr);
-    	
-    	while((libro = br.readLine()) != null) {
-            libros.add(libro);
-        }
-    	br.close();
+    	if(libros.size() == 0) {
+	    	String fichero = "C:\\Users\\manu\\Desktop\\Biblioteca\\WebContent\\ficheros";
+	    	String lineaFichero;
+	    	
+	    	FileReader fr = new FileReader(fichero);
+	    	BufferedReader br = new BufferedReader(fr);
+	    	
+	    	while((lineaFichero = br.readLine()) != null) {
+	    		String[] datosLibro = lineaFichero.split(";");
+	    		Libro libro = new Libro(datosLibro[0], datosLibro[1], datosLibro[2], datosLibro[3]);
+	    		libros.add(libro);
+	        }
+	    	br.close();
+    	}
     }
-
+    
     protected void procesaSolicitud(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
- 
+    	leeFicheroLibros();
     	response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-    	
+        
     	Boolean esAjax;
 	    esAjax="XMLHttpRequest".equalsIgnoreCase(request.getHeader("X-Requested-With")); // Cabecera X-Requested-With
 	    if (esAjax) {
 	        //Recoge el parámetro isbn
 	        String isbn = request.getParameter("isbn");
-	        boolean isbnValido = false;
-	        //String[] libroSeleccionado = {""};
-	        String libro = "";
+	        String verTodos = request.getParameter("verTodos");
+	        String eliminarLibro = request.getParameter("eliminar");
 	        
-        	for(int i=0; i<libros.size(); i++) {
-        		String[] datosLibro = libros.get(i).split(";");
-        		if(datosLibro[0].equals(isbn)) {
-        			isbnValido = true;
-        			libro = datosLibro[1];
-        			break;
+        	if(verTodos == null) {
+        		boolean eliminado = false;
+        		if (eliminarLibro != null){
+        			for(int i=0; i<libros.size(); i++) {
+                		if(eliminarLibro.equals(libros.get(i).getIsbn())) {
+                			libros.remove(i);
+                			eliminado = true;
+                		}
+                	}
+        			if(eliminado == true) {
+        				out.println("Libro eliminado.");
+        			} else {
+        				out.println("ISBN no encontrado.");
+        			}
         		}
-        	}
-        	if(isbnValido == false) {
-        		out.println("ISBN no válido.");
+        		boolean isbnValido = false;
+    	        Libro libroValido = new Libro();
+    	        
+            	for(int i=0; i<libros.size(); i++) {
+            		if(isbn.equals(libros.get(i).getIsbn())) {
+            			isbnValido = true;
+            			libroValido = libros.get(i);
+            			break;
+            		}
+            	}
+	        	if(isbnValido == false) {
+	        		out.println("<font color='red'>ISBN no encontrado.</font>");
+	        	} else {
+		        		out.println("<hr>");
+		        		out.println("ISBN: " + libroValido.getIsbn() + "<br>");
+		        		out.println("Título: " + libroValido.getTitulo() + "<br>");
+		        		out.println("Autor: " + libroValido.getAutor() + "<br>");
+		        		out.println("Año: " + libroValido.getYear());
+	        		}
         	} else {
-        		/*out.println("ISBN: " + libroSeleccionado[0]);
-        		out.println("Título: " + libroSeleccionado[1]);
-        		out.println("Autor: " + libroSeleccionado[2]);
-        		out.println("Año: " + libroSeleccionado[3]);*/
-        		out.println("ISBN válido.");
+        		for(int i = 0; i < libros.size(); i++) {
+        			out.println("<hr>");
+	        		out.println("ISBN: " + libros.get(i).getIsbn() + "<br>");
+	        		out.println("Título: " + libros.get(i).getTitulo() + "<br>");
+	        		out.println("Autor: " + libros.get(i).getAutor() + "<br>");
+	        		out.println("Año: " + libros.get(i).getYear() + "<br>");
+        		}
         	}
 	    } else {
 	        out.println("Este servlet solo se puede invocar vía Ajax");
