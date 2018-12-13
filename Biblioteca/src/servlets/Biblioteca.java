@@ -61,15 +61,15 @@ public class Biblioteca extends HttpServlet {
 	        String agregarTitulo = request.getParameter("agregarTitulo");
 	        String agregarAutor = request.getParameter("agregarAutor");
 	        String agregarYear = request.getParameter("agregarYear");
-	        String menuModificarString = request.getParameter("menuModificar");
-	        int menuModificar = 0;
-	        if(menuModificarString != null) {
-	        	menuModificar = Integer.parseInt(menuModificarString);
-	        }
+	        String menuModificar1 = request.getParameter("menuModificar");
 	        String modificarISBN = request.getParameter("modificarISBN");
 	        String modificarTitulo = request.getParameter("modificarTitulo");
 	        String modificarAutor = request.getParameter("modificarAutor");
 	        String modificarYear = request.getParameter("modificarYear");
+	        String modificarLibro1 = request.getParameter("modificarLibro");
+	       
+	        //ArrayList<Integer> numLibro = new ArrayList<Integer>(); // En numLibro guardo el numero del libro cuando se va a modificar.
+	        
 	        
         	if(isbn != null) {
         		boolean isbnValido = false;
@@ -98,8 +98,14 @@ public class Biblioteca extends HttpServlet {
 	        		out.println("Título: " + libros.get(i).getTitulo() + "<br>");
 	        		out.println("Autor: " + libros.get(i).getAutor() + "<br>");
 	        		out.println("Año: " + libros.get(i).getYear() + "<br>");
-	        		out.println("<button type='button' id='modificar' value='"+i+1+"' onClick='menuModificar()'>Modificar libro</button>");
+	        		//out.println("<input type='hidden'  />");
+	        		out.println("<button type='button' id='"+i+"' value='" + libros.get(i).getIsbn() + "'onClick='menuModificar(this.id)'>Modificar libro</button>");
+	        		//numLibro.add(i);
         		}
+        		/*int i = 0;
+        		while(i < numLibro.size()) {
+        			out.println("<input type='hidden'  id='modificar' value='" + libros.get(i).getIsbn() + "'/>");
+        		}*/
         	} else if(eliminarLibro != null) {
         			boolean eliminado = false;
 	    			for(int i=0; i<libros.size(); i++) {
@@ -136,15 +142,15 @@ public class Biblioteca extends HttpServlet {
         				out.println("<font color='red'>Debes rellenar todos los campos para añadir un libro.</font>");
         			}
         		}
-        	} else if(menuModificarString != null) {
+        	} else if(menuModificar1 != null) {
         		out.println("MODIFICAR LIBRO");
         		out.println("<hr>");
         		out.println("ISBN: <input type='text' id='modificarISBN'/><br>");
         		out.println("Título: <input type='text' id='modificarTitulo'/><br>");
         		out.println("Autor: <input type='text' id='modificarAutor'/><br>");
         		out.println("Año: <input type='text' id='modificarYear'/><br>");
-        		out.println("<button type='button' id='modificar' onClick='modificarLibro()'>Modificar libro</button>");
-        	} else if(modificarISBN != null && modificarTitulo != null && modificarAutor != null && modificarYear != null) {
+        		out.println("<button type='button' id='modificarLibroValue' value='"+menuModificar1+"' onClick='modificarLibro()'>Modificar libro</button>");
+        	} else if(modificarISBN != null) {
         		boolean libroModificado = true;
         		for(int i=0; i<libros.size(); i++) {
         			if(libros.get(i).getIsbn().equals(modificarISBN)) {
@@ -156,20 +162,18 @@ public class Biblioteca extends HttpServlet {
         			if(modificarISBN == "") {
         				out.println("<font color='red'>Debes introducir al menos el ISBN.</font>");
         			} else {
-        				libros.get(menuModificar).setIsbn(modificarISBN);
-        				if(modificarTitulo != "") {
-            				libros.get(menuModificar).setTitulo(modificarTitulo);
-            			}
-        				if(modificarTitulo != "") {
-            				libros.get(menuModificar).setTitulo(modificarTitulo);
-            			}
-        				if(modificarAutor != "") {
-            				libros.get(menuModificar).setAutor(modificarAutor);
-            			}
-        				if(modificarYear != "") {
-            				libros.get(menuModificar).setYear(modificarYear);
-            			}
-        				out.println("<font color='green'>Libro modificado.</font>");
+        					int modificarLibro = Integer.parseInt(modificarLibro1);
+    						libros.get(modificarLibro).setIsbn(modificarISBN);
+            				if(modificarTitulo != "") {
+                				libros.get(modificarLibro).setTitulo(modificarTitulo);
+                			}
+            				if(modificarAutor != "") {
+                				libros.get(modificarLibro).setAutor(modificarAutor);
+                			}
+            				if(modificarYear != "") {
+                				libros.get(modificarLibro).setYear(modificarYear);
+                			}
+    				out.println("<font color='green'>Libro modificado.</font>");
         				}
         			}
     			} else {

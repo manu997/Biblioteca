@@ -110,8 +110,9 @@
 	    xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
 	    xmlhttp.send();  // lanza la solicitud
 	}
-	function menuModificar() {
-		var datos = 'menuModificar=' + document.getElementById('modificar').value;
+	function menuModificar(id) {
+		var datos = 'menuModificar=' + id;
+		alert(datos);
 		var xmlhttp;  // objeto XMLHttpRequest
 		if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
 		    xmlhttp = new XMLHttpRequest();
@@ -133,7 +134,8 @@
 		var datos = 'modificarISBN=' + document.getElementById("modificarISBN").value + 
 		'&modificarTitulo=' + document.getElementById("modificarTitulo").value + 
 		'&modificarAutor=' + document.getElementById("modificarAutor").value + 
-		'&modificarYear='  + document.getElementById("modificarYear").value;
+		'&modificarYear='  + document.getElementById("modificarYear").value +
+		'&modificarLibro=' + document.getElementById("modificarLibroValue").value;
 		var xmlhttp;  // objeto XMLHttpRequest
 		if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
 		    xmlhttp = new XMLHttpRequest();
@@ -154,6 +156,7 @@
 </script>
 </head>
 <body>
+	
 	<form>
 		ISBN: <input type="text" name="isbn" id="isbn"/><br>
 		<button type="button" onClick="buscarLibro()">Buscar libro</button> 
