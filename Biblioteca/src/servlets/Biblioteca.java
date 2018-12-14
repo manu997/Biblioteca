@@ -112,10 +112,10 @@ public class Biblioteca extends HttpServlet {
     			out.println("<hr>");
     			out.println("AÑADIR LIBRO");
         		out.println("<hr>");
-        		out.println("ISBN: <input class='form-control mr-sm-2' type='text' id='agregarISBN'/><br>");
+        		out.println("ISBN (DEBEN SER 13 CARACTERES): <input class='form-control mr-sm-2' type='text' id='agregarISBN'/><br>");
         		out.println("Título: <input class='form-control mr-sm-2' type='text' id='agregarTitulo'/><br>");
         		out.println("Autor: <input class='form-control mr-sm-2' type='text' id='agregarAutor'/><br>");
-        		out.println("Año: <input class='form-control mr-sm-2' type='text' id='agregarYear'/><br>");
+        		out.println("Año (DEBE SER UN NÚMERO MENOR O IGUAL QUE 2018): <input class='form-control mr-sm-2' type='text' id='agregarYear'/><br>");
         		out.println("<button class='btn btn-outline-success my-2 my-sm-0' type='button' id='agregar' onClick='agregarLibro()'>Añadir libro</button>");
         	} else if(agregarISBN != null && agregarTitulo != null && agregarAutor != null && agregarYear != null) {
         		boolean libroAgregado = true;
@@ -127,10 +127,54 @@ public class Biblioteca extends HttpServlet {
         		}
         		if(libroAgregado == true) {
         			if(agregarISBN != "" && agregarTitulo != "" && agregarAutor != "" && agregarYear != "") {
-            			libros.add(new Libro(agregarISBN, agregarTitulo, agregarAutor, agregarYear));
-                		out.println("<font color='green'>Libro añadido.</font>");
+        				int comprobarYear;
+        				try {
+        					comprobarYear = Integer.parseInt(agregarYear);
+        					if(comprobarYear > 2018){
+            					out.println("<font color='red'>El año no puede ser superior a 2018.</font>");
+            					out.println("<hr>");
+            	    			out.println("AÑADIR LIBRO");
+            	        		out.println("<hr>");
+            	        		out.println("ISBN (DEBEN SER 13 CARACTERES): <input class='form-control mr-sm-2' type='text' id='agregarISBN'/><br>");
+            	        		out.println("Título: <input class='form-control mr-sm-2' type='text' id='agregarTitulo'/><br>");
+            	        		out.println("Autor: <input class='form-control mr-sm-2' type='text' id='agregarAutor'/><br>");
+            	        		out.println("Año (DEBE SER UN NÚMERO MENOR O IGUAL QUE 2018): <input class='form-control mr-sm-2' type='text' id='agregarYear'/><br>");
+            	        		out.println("<button class='btn btn-outline-success my-2 my-sm-0' type='button' id='agregar' onClick='agregarLibro()'>Añadir libro</button>");
+        					} else if(agregarISBN.length() != 13) {
+            					out.println("<font color='red'>El ISBN debe tener 13 caracteres.</font>");
+            					out.println("<hr>");
+            	    			out.println("AÑADIR LIBRO");
+            	        		out.println("<hr>");
+            	        		out.println("ISBN (DEBEN SER 13 CARACTERES): <input class='form-control mr-sm-2' type='text' id='agregarISBN'/><br>");
+            	        		out.println("Título: <input class='form-control mr-sm-2' type='text' id='agregarTitulo'/><br>");
+            	        		out.println("Autor: <input class='form-control mr-sm-2' type='text' id='agregarAutor'/><br>");
+            	        		out.println("Año (DEBE SER UN NÚMERO MENOR O IGUAL QUE 2018): <input class='form-control mr-sm-2' type='text' id='agregarYear'/><br>");
+            	        		out.println("<button class='btn btn-outline-success my-2 my-sm-0' type='button' id='agregar' onClick='agregarLibro()'>Añadir libro</button>");
+            				} else {
+            					libros.add(new Libro(agregarISBN, agregarTitulo, agregarAutor, agregarYear));
+                				out.println("<font color='green'>Libro añadido.</font>");
+            				}
+        				} catch (NumberFormatException e){
+        					out.println("<font color='red'>El año debe ser un número.</font>");
+        					out.println("<hr>");
+        	    			out.println("AÑADIR LIBRO");
+        	        		out.println("<hr>");
+        	        		out.println("ISBN (DEBEN SER 13 CARACTERES): <input class='form-control mr-sm-2' type='text' id='agregarISBN'/><br>");
+        	        		out.println("Título: <input class='form-control mr-sm-2' type='text' id='agregarTitulo'/><br>");
+        	        		out.println("Autor: <input class='form-control mr-sm-2' type='text' id='agregarAutor'/><br>");
+        	        		out.println("Año (DEBE SER UN NÚMERO MENOR O IGUAL QUE 2018): <input class='form-control mr-sm-2' type='text' id='agregarYear'/><br>");
+        	        		out.println("<button class='btn btn-outline-success my-2 my-sm-0' type='button' id='agregar' onClick='agregarLibro()'>Añadir libro</button>");
+        				}
         			} else {
         				out.println("<font color='red'>Debes rellenar todos los campos para añadir un libro.</font>");
+        				out.println("<hr>");
+            			out.println("AÑADIR LIBRO");
+                		out.println("<hr>");
+                		out.println("ISBN (DEBEN SER 13 CARACTERES): <input class='form-control mr-sm-2' type='text' id='agregarISBN'/><br>");
+                		out.println("Título: <input class='form-control mr-sm-2' type='text' id='agregarTitulo'/><br>");
+                		out.println("Autor: <input class='form-control mr-sm-2' type='text' id='agregarAutor'/><br>");
+                		out.println("Año (DEBE SER UN NÚMERO MENOR O IGUAL QUE 2018): <input class='form-control mr-sm-2' type='text' id='agregarYear'/><br>");
+                		out.println("<button class='btn btn-outline-success my-2 my-sm-0' type='button' id='agregar' onClick='agregarLibro()'>Añadir libro</button>");
         			}
         		}
         	} else if(menuModificar1 != null) {
@@ -152,7 +196,15 @@ public class Biblioteca extends HttpServlet {
         		}
         		if(libroModificado == true) {
         			if(modificarISBN == "") {
-        				out.println("<font color='red'>Debes introducir al menos el ISBN.</font>");
+        				out.println("<font color='red' style='margin-top: 1%;'>Debes introducir al menos el ISBN.</font>");
+        				out.println("<hr>");
+                		out.println("MODIFICAR LIBRO");
+                		out.println("<hr>");
+                		out.println("ISBN: <input class='form-control mr-sm-2' type='text' id='modificarISBN'/><br>");
+                		out.println("Título: <input class='form-control mr-sm-2' type='text' id='modificarTitulo'/><br>");
+                		out.println("Autor: <input class='form-control mr-sm-2' type='text' id='modificarAutor'/><br>");
+                		out.println("Año: <input class='form-control mr-sm-2' type='text' id='modificarYear'/><br>");
+                		out.println("<button class='btn btn-outline-success my-2 my-sm-0' type='button' id='modificarLibroValue' value='"+menuModificar1+"' onClick='modificarLibro()'>Modificar libro</button>");
         			} else {
         					int modificarLibro = Integer.parseInt(modificarLibro1);
     						libros.get(modificarLibro).setIsbn(modificarISBN);
@@ -170,6 +222,14 @@ public class Biblioteca extends HttpServlet {
         			}
     			} else {
     				out.println("<font color='red'>Debes introducir al menos el ISBN.</font>");
+    				out.println("<hr>");
+            		out.println("MODIFICAR LIBRO");
+            		out.println("<hr>");
+            		out.println("ISBN: <input class='form-control mr-sm-2' type='text' id='modificarISBN'/><br>");
+            		out.println("Título: <input class='form-control mr-sm-2' type='text' id='modificarTitulo'/><br>");
+            		out.println("Autor: <input class='form-control mr-sm-2' type='text' id='modificarAutor'/><br>");
+            		out.println("Año: <input class='form-control mr-sm-2' type='text' id='modificarYear'/><br>");
+            		out.println("<button class='btn btn-outline-success my-2 my-sm-0' type='button' id='modificarLibroValue' value='"+menuModificar1+"' onClick='modificarLibro()'>Modificar libro</button>");
     			}	
 	    } else {
 	        out.println("Este servlet solo se puede invocar vía Ajax");

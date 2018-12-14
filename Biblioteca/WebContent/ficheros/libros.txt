@@ -1,4 +1,4 @@
-978-8498388916;Harry Potter y la piedra filosofal;JK Rowilng;1997
-978-8427202122;Los juegos del hambre;Suzanne Collins;2008
-978-8496208964;Juego de tronos;George R.R. Martin;1996
-978-8497593793;It;Stephen King;1986
+9788498388916;Harry Potter y la piedra filosofal;JK Rowilng;1997
+9788427202122;Los juegos del hambre;Suzanne Collins;2008
+9788496208964;Juego de tronos;George R.R. Martin;1996
+9788497593793;It;Stephen King;1986
