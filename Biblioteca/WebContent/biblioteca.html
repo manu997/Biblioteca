@@ -3,10 +3,20 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Biblioteca</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <style>
 	body {
 		line-height: 2;
 		text-align: center;
+		margin: 1%;
+		background-color: #F7F7F7;
+	}
+	h1 {
+		font-weight: bold;
+		font-family: 'Verdana';
+		margin-bottom: 1%;
+		color: #28A745;
 	}
 </style>
 <script>
@@ -112,7 +122,6 @@
 	}
 	function menuModificar(id) {
 		var datos = 'menuModificar=' + id;
-		alert(datos);
 		var xmlhttp;  // objeto XMLHttpRequest
 		if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
 		    xmlhttp = new XMLHttpRequest();
@@ -156,14 +165,20 @@
 </script>
 </head>
 <body>
-	
-	<form>
-		ISBN: <input type="text" name="isbn" id="isbn"/><br>
-		<button type="button" onClick="buscarLibro()">Buscar libro</button> 
-		<button type="button" name="verTodos" id="verTodos" onClick="mostrarLibros()">Mostrar todos los libros</button> 
-		<button type="button"  name="eliminar" id="eliminar" onClick="eliminarLibro()">Eliminar libro</button>
-		<button type="button" id="menu" onClick="menuAgregar()">Añadir libro</button>
+	<div class="jumbotron">
+		<h1>BIBLIOTECA</h1>
+	</div>
+	<div class="container">
+		<nav class="nav justify-content-center">
+		  <form class="form-inline">
+		    <button class="btn btn-outline-success my-2 my-sm-0" type="button" onClick="buscarLibro()">Buscar libro</button>&nbsp
+			<button class="btn btn-outline-success my-2 my-sm-0" type="button" name="verTodos" id="verTodos" onClick="mostrarLibros()">Mostrar todos los libros</button>&nbsp
+			<input class="form-control mr-sm-2" type="text" name="isbn" id="isbn" placeholder="ISBN"/><br> 
+		    <button class="btn btn-outline-success my-2 my-sm-0" type="button"  name="eliminar" id="eliminar" onClick="eliminarLibro()">Eliminar libro</button>&nbsp
+			<button class="btn btn-outline-success my-2 my-sm-0" type="button" id="menu" onClick="menuAgregar()">Añadir libro</button>
+		  </form>
+		</nav>
 		<div id="datosLibro"></div>
-	</form>
+	</div>
 </body>
 </html>

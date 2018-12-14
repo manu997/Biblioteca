@@ -29,7 +29,7 @@ public class Biblioteca extends HttpServlet {
     
     public void leeFicheroLibros() throws IOException {
     	if(libros.size() == 0) {
-    		String directorioDestino ="ficheros/libros.txt"; // se crea directamente en el proyecto
+    		String directorioDestino ="ficheros/libros.txt";
 	    	String lineaFichero;
 	    	
 	    	FileReader fr = new FileReader(this.getServletContext().getRealPath("/") +  directorioDestino);
@@ -50,9 +50,8 @@ public class Biblioteca extends HttpServlet {
         PrintWriter out = response.getWriter();
         
     	Boolean esAjax;
-	    esAjax="XMLHttpRequest".equalsIgnoreCase(request.getHeader("X-Requested-With")); // Cabecera X-Requested-With
+	    esAjax="XMLHttpRequest".equalsIgnoreCase(request.getHeader("X-Requested-With"));
 	    if (esAjax) {
-	        //Recoge el parámetro isbn
 	        String isbn = request.getParameter("isbn");
 	        String verTodos = request.getParameter("verTodos");
 	        String eliminarLibro = request.getParameter("eliminar");
@@ -66,10 +65,7 @@ public class Biblioteca extends HttpServlet {
 	        String modificarTitulo = request.getParameter("modificarTitulo");
 	        String modificarAutor = request.getParameter("modificarAutor");
 	        String modificarYear = request.getParameter("modificarYear");
-	        String modificarLibro1 = request.getParameter("modificarLibro");
-	       
-	        //ArrayList<Integer> numLibro = new ArrayList<Integer>(); // En numLibro guardo el numero del libro cuando se va a modificar.
-	        
+	        String modificarLibro1 = request.getParameter("modificarLibro");	        
 	        
         	if(isbn != null) {
         		boolean isbnValido = false;
@@ -98,14 +94,8 @@ public class Biblioteca extends HttpServlet {
 	        		out.println("Título: " + libros.get(i).getTitulo() + "<br>");
 	        		out.println("Autor: " + libros.get(i).getAutor() + "<br>");
 	        		out.println("Año: " + libros.get(i).getYear() + "<br>");
-	        		//out.println("<input type='hidden'  />");
-	        		out.println("<button type='button' id='"+i+"' value='" + libros.get(i).getIsbn() + "'onClick='menuModificar(this.id)'>Modificar libro</button>");
-	        		//numLibro.add(i);
+	        		out.println("<button class='btn btn-outline-success my-2 my-sm-0' type='button' id='"+i+"' value='" + libros.get(i).getIsbn() + "'onClick='menuModificar(this.id)'>Modificar libro</button>");
         		}
-        		/*int i = 0;
-        		while(i < numLibro.size()) {
-        			out.println("<input type='hidden'  id='modificar' value='" + libros.get(i).getIsbn() + "'/>");
-        		}*/
         	} else if(eliminarLibro != null) {
         			boolean eliminado = false;
 	    			for(int i=0; i<libros.size(); i++) {
@@ -119,13 +109,14 @@ public class Biblioteca extends HttpServlet {
 	    				out.println("<font color='red'>ISBN no encontrado.</font>");
 	    			}
     		} else if(menuAgregar != null){
-    			out.println("AGREGAR LIBRO");
+    			out.println("<hr>");
+    			out.println("AÑADIR LIBRO");
         		out.println("<hr>");
-        		out.println("ISBN: <input type='text' id='agregarISBN'/><br>");
-        		out.println("Título: <input type='text' id='agregarTitulo'/><br>");
-        		out.println("Autor: <input type='text' id='agregarAutor'/><br>");
-        		out.println("Año: <input type='text' id='agregarYear'/><br>");
-        		out.println("<button type='button' id='agregar' onClick='agregarLibro()'>Añadir libro</button>");
+        		out.println("ISBN: <input class='form-control mr-sm-2' type='text' id='agregarISBN'/><br>");
+        		out.println("Título: <input class='form-control mr-sm-2' type='text' id='agregarTitulo'/><br>");
+        		out.println("Autor: <input class='form-control mr-sm-2' type='text' id='agregarAutor'/><br>");
+        		out.println("Año: <input class='form-control mr-sm-2' type='text' id='agregarYear'/><br>");
+        		out.println("<button class='btn btn-outline-success my-2 my-sm-0' type='button' id='agregar' onClick='agregarLibro()'>Añadir libro</button>");
         	} else if(agregarISBN != null && agregarTitulo != null && agregarAutor != null && agregarYear != null) {
         		boolean libroAgregado = true;
         		for(int i=0; i<libros.size(); i++) {
@@ -143,13 +134,14 @@ public class Biblioteca extends HttpServlet {
         			}
         		}
         	} else if(menuModificar1 != null) {
+        		out.println("<hr>");
         		out.println("MODIFICAR LIBRO");
         		out.println("<hr>");
-        		out.println("ISBN: <input type='text' id='modificarISBN'/><br>");
-        		out.println("Título: <input type='text' id='modificarTitulo'/><br>");
-        		out.println("Autor: <input type='text' id='modificarAutor'/><br>");
-        		out.println("Año: <input type='text' id='modificarYear'/><br>");
-        		out.println("<button type='button' id='modificarLibroValue' value='"+menuModificar1+"' onClick='modificarLibro()'>Modificar libro</button>");
+        		out.println("ISBN: <input class='form-control mr-sm-2' type='text' id='modificarISBN'/><br>");
+        		out.println("Título: <input class='form-control mr-sm-2' type='text' id='modificarTitulo'/><br>");
+        		out.println("Autor: <input class='form-control mr-sm-2' type='text' id='modificarAutor'/><br>");
+        		out.println("Año: <input class='form-control mr-sm-2' type='text' id='modificarYear'/><br>");
+        		out.println("<button class='btn btn-outline-success my-2 my-sm-0' type='button' id='modificarLibroValue' value='"+menuModificar1+"' onClick='modificarLibro()'>Modificar libro</button>");
         	} else if(modificarISBN != null) {
         		boolean libroModificado = true;
         		for(int i=0; i<libros.size(); i++) {
